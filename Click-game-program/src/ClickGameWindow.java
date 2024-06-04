@@ -9,8 +9,11 @@ public class ClickGameWindow {
     private Container c;
     private JPanel panel;
     private JButton clickButton;
+    private JLabel tempo;
+    private JLabel punti;
     private Random random;
     private int secondi;
+    private int points;
 
 
     public ClickGameWindow () {
@@ -29,23 +32,31 @@ public class ClickGameWindow {
 
         clickButton.setBounds(350, 251, 100, 50);
 
+        secondi = 2; //il tempo finisce a zero quindi va calcolato un numero in meno qui ad esempio in timer e di 2 secondi
+
+        tempo = new JLabel("time: " + secondi);
+        tempo.setBounds(0,0,100,30);
+        c.add(tempo);
+
+        points = 0;
+        punti = new JLabel("punti: " + points);
+        punti.setBounds(730,0,100,30);
+        c.add(punti);
+
+
+
         // Questo e il timer che permette al bottne di cambiare posizione quando scade simulando un limite di tempo
         Timer timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 secondi--;
-                System.out.println("Tempo rimanente: " + secondi+ " secondi"); // temporanee per monitorare il tempo
+                tempo.setText("time: " + secondi);
+
                 if (secondi <= 0) {
                     int randX = random.nextInt(700);
                     int randY = random.nextInt(513);
-
                     clickButton.setBounds(randX, randY, 100, 50);
-
-                    ((Timer) e.getSource()).stop();
-
-                    System.out.println("GAME OVER!"); // temporanee per monitorare il tempo  
-                    secondi = 2; // utile per far ripartire il timer da dove vogliamo
-                    ((Timer) e.getSource()).start();
+                    secondi = 3; // utile per far ripartire il timer da dove vogliamo
 
                 }
             }
@@ -55,15 +66,16 @@ public class ClickGameWindow {
         clickButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    secondi = 2;
-                    timer.start(); // con questa + il comando prima andiamo a reimpostare il timer al tempo predefinito
+                    points++;
+                    punti.setText("punti: " + points); //semplice sistema di punti
+                    secondi = 3;
+                    timer.restart(); // con questa + il comando prima andiamo a reimpostare il timer al tempo predefinito
                     int randX = random.nextInt(700);
                     int randY = random.nextInt(513);
 
                     clickButton.setBounds(randX, randY, 100, 50);
                 }
             });
-
         c.add(clickButton);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
