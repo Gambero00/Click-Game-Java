@@ -3,7 +3,10 @@ import java.awt.*;
 
 public class StartPanel extends JPanel {
     private JLabel titolo;
-    public StartPanel(JFrame frame, int height, int width) {
+    int buttonheigth;
+    int buttonwidth;
+    int rounds;
+    public StartPanel(JFrame frame, int height, int width, int gameTime, int buttonheigth, int buttonwidth, int rounds) {
 
         setLayout(new GridBagLayout());
         Dimension titleSize = new Dimension(1000, 100); // Dimensioni più grandi per il titolo
@@ -23,7 +26,8 @@ public class StartPanel extends JPanel {
         gbc.gridy = 1;
         JButton playButton = new JButton("GIOCA");
         playButton.addActionListener(e -> {
-            frame.setContentPane(new ClickGamePanel(height, width));
+
+            frame.setContentPane(new ClickGamePanel(frame, height, width, gameTime, buttonheigth, buttonwidth, rounds));
             frame.revalidate();
             frame.repaint();
         });
@@ -33,7 +37,9 @@ public class StartPanel extends JPanel {
         gbc.gridy = 2;
         JButton settingsButton = new JButton("IMPOSTAZIONI");
         settingsButton.addActionListener(e -> {
-            // se
+            frame.setContentPane(new SettingsPanel(frame, height, width));
+            frame.revalidate();
+            frame.repaint();
         });
         settingsButton.setPreferredSize(buttonSize);
         add(settingsButton, gbc);

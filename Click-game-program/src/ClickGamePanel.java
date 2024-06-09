@@ -11,25 +11,22 @@ public class ClickGamePanel extends JPanel{
     private Random random;
     private int secondi;
     private int points;
+    private int nonpoints;
 
-    public ClickGamePanel (int height, int width) {
+    public ClickGamePanel (JFrame frame, int height, int width, int gameTime, int buttonheigth, int buttonwidth, int rounds) {
 
         setLayout(null); // mettiamo il layout null apposta per la generazione della posizione in modo che il pulsante non vada in posizioni indesiderate
 
         random = new Random();
 
         clickButton = new JButton("Click");
-        //polo superiore piu alto
-        //clickButton.setBounds(0,0,100,50);
-        //polo inferiore piu basso
-        //clickButton.setBounds(700,513,100,50);
 
-        clickButton.setBounds(width / 2 - 50, height / 2 - 50, 100, 50);
+        clickButton.setBounds(width / 2 - 50, height / 2 - 50, buttonwidth, buttonheigth);
 
-        secondi = 1; //il tempo finisce a zero quindi va calcolato un numero in meno qui ad esempio in timer e di 2 secondi
+        secondi = gameTime-1; //il tempo finisce a zero quindi va calcolato un numero in meno qui ad esempio in timer e di 2 secondi
 
         tempo = new JLabel("time: " + secondi);
-        tempo.setBounds(width - (width - 70),0,100,30);
+        tempo.setBounds(width - (width - 70),0, 100, 30);
         add(tempo);
 
         points = 0;
@@ -47,10 +44,14 @@ public class ClickGamePanel extends JPanel{
                 tempo.setText("time: " + secondi);
 
                 if (secondi <= 0) {
+                    nonpoints++;
+                    if((nonpoints + points) == rounds ) {
+                        JOptionPane.showMessageDialog(frame, "Il tuo punteggio " + points + "su" + rounds, "Successo", JOptionPane.INFORMATION_MESSAGE);
+                    }
                     int randX = random.nextInt(width - 50);
                     int randY = random.nextInt(height - 50);
-                    clickButton.setBounds(randX, randY, 100, 50);
-                    secondi = 2; // utile per far ripartire il timer da dove vogliamo
+                    clickButton.setBounds(randX, randY, buttonwidth, buttonheigth);
+                    secondi = gameTime; // utile per far ripartire il timer da dove vogliamo
 
                 }
             }
@@ -61,13 +62,16 @@ public class ClickGamePanel extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 points++;
+                if((nonpoints + points) == rounds ) {
+                    JOptionPane.showMessageDialog(frame, "Il tuo punteggio " + points + "su" + rounds, "Successo", JOptionPane.INFORMATION_MESSAGE);
+                }
                 punti.setText("punti: " + points); //semplice sistema di punti
-                secondi = 2  ;
+                secondi = gameTime ;
                 timer.start(); // con questa + il comando prima andiamo a reimpostare il timer al tempo predefinito
                 int randX = random.nextInt(width - 50);
                 int randY = random.nextInt(height - 50);
 
-                clickButton.setBounds(randX, randY, 100, 50);
+                clickButton.setBounds(randX, randY, buttonwidth, buttonheigth);
             }
         });
         add(clickButton);

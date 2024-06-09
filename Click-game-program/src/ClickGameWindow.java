@@ -4,6 +4,10 @@ import java.awt.*;
 public class ClickGameWindow extends JFrame {
     public ClickGameWindow() {
         int height, width;
+        int gameTime = 4;
+        int buttonheight = 100;
+        int buttonwidth = 200;
+        int rounds = 5;
 
         GraphicsDevice device = GraphicsEnvironment
                 .getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -23,7 +27,7 @@ public class ClickGameWindow extends JFrame {
         setTitle("Click-Game");
 
         // Imposta il pannello iniziale come contenuto del frame
-        setContentPane(new StartPanel(this, height, width));
+        setContentPane(new StartPanel(this, height, width, gameTime, buttonheight, buttonwidth, rounds));
 
         setVisible(true);
     }
