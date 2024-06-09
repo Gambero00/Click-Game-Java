@@ -25,8 +25,12 @@ public class ClickGamePanel extends JPanel{
 
         secondi = gameTime-1; //il tempo finisce a zero quindi va calcolato un numero in meno qui ad esempio in timer e di 2 secondi
 
+        JButton esci = new JButton("ESCI");
+        esci.setBounds(width - width,0, 100, 30);
+        add(esci);
+
         tempo = new JLabel("time: " + secondi);
-        tempo.setBounds(width - (width - 70),0, 100, 30);
+        tempo.setBounds(width - (width - 100),0, 100, 30);
         add(tempo);
 
         points = 0;
@@ -46,7 +50,32 @@ public class ClickGamePanel extends JPanel{
                 if (secondi <= 0) {
                     nonpoints++;
                     if((nonpoints + points) == rounds ) {
-                        JOptionPane.showMessageDialog(frame, "Il tuo punteggio " + points + "su" + rounds, "Successo", JOptionPane.INFORMATION_MESSAGE);
+                        ((Timer) e.getSource()).stop();
+                        if ((nonpoints + points) == rounds) {
+                            ((Timer) e.getSource()).stop();
+                            String[] options = {"Ricomincia", "Esci"};
+                            int risultati = JOptionPane.showOptionDialog(
+                                    frame,
+                                    "Il tuo punteggio " + points + " su " + rounds,
+                                    "Successo",
+                                    JOptionPane.DEFAULT_OPTION,
+                                    JOptionPane.WARNING_MESSAGE,
+                                    null,
+                                    options,
+                                    options[0]
+                            );
+
+                            if (risultati == JOptionPane.YES_OPTION) {
+                                frame.setContentPane(new ClickGamePanel(frame, height, width, gameTime, buttonheigth, buttonwidth, rounds));
+                                frame.revalidate();
+                                frame.repaint();
+                            } else {
+                                frame.setContentPane(new StartPanel(frame, height, width, gameTime, buttonheigth, buttonwidth, rounds));
+                                frame.revalidate();
+                                frame.repaint();
+                            }
+
+                        }
                     }
                     int randX = random.nextInt(width - 50);
                     int randY = random.nextInt(height - 50);
@@ -63,8 +92,32 @@ public class ClickGamePanel extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 points++;
                 if((nonpoints + points) == rounds ) {
-                    JOptionPane.showMessageDialog(frame, "Il tuo punteggio " + points + "su" + rounds, "Successo", JOptionPane.INFORMATION_MESSAGE);
-                }
+                    timer.stop();
+
+                        String[] options = {"Ricomincia", "Esci"};
+                        int risultati = JOptionPane.showOptionDialog(
+                                frame,
+                                "Il tuo punteggio " + points + " su " + rounds,
+                                "Successo",
+                                JOptionPane.DEFAULT_OPTION,
+                                JOptionPane.WARNING_MESSAGE,
+                                null,
+                                options,
+                                options[0]
+                        );
+
+                        if (risultati == JOptionPane.YES_OPTION) {
+                            frame.setContentPane(new ClickGamePanel(frame, height, width, gameTime, buttonheigth, buttonwidth, rounds));
+                            frame.revalidate();
+                            frame.repaint();
+                        } else {
+                            frame.setContentPane(new StartPanel(frame, height, width, gameTime, buttonheigth, buttonwidth, rounds));
+                            frame.revalidate();
+                            frame.repaint();
+                        }
+
+                    }
+
                 punti.setText("punti: " + points); //semplice sistema di punti
                 secondi = gameTime ;
                 timer.start(); // con questa + il comando prima andiamo a reimpostare il timer al tempo predefinito
@@ -74,6 +127,16 @@ public class ClickGamePanel extends JPanel{
                 clickButton.setBounds(randX, randY, buttonwidth, buttonheigth);
             }
         });
+        esci.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                timer.stop();
+                frame.setContentPane(new StartPanel(frame, height, width, gameTime, buttonheigth, buttonwidth, rounds));
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
         add(clickButton);
     }
 }
